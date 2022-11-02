@@ -9,7 +9,7 @@ class Formfield extends StatelessWidget {
       width: 350,
       margin: EdgeInsets.only(bottom: 20),
       child: TextField(
-        // obscureText: true,
+        obscureText: true,
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mp_board/pages/login.dart';
 import 'package:mp_board/pages/mainpage.dart';
 import 'package:mp_board/pages/signup.dart';
+import 'package:mp_board/pages/writing.dart';
 
 class StartPage extends StatelessWidget {
   const StartPage({super.key});
@@ -46,6 +47,17 @@ class StartPage extends StatelessWidget {
                   );
                 },
                 child: Text('메인페이지'),
+              ),
+            ),
+            Container(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Writing()),
+                  );
+                },
+                child: Text('글쓰기페이지'),
               ),
             ),
           ],
