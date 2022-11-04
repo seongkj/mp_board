@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:mp_board/pages/writing.dart';
 
 // 게시판 메인 페이지
@@ -25,7 +26,9 @@ class MainPage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('게시판'),
+                  GestureDetector(
+                      onTap: (() => Get.to(() => MainPage())),
+                      child: Text('게시판')),
                   Icon(Icons.more_horiz, size: 35),
                 ],
               ),

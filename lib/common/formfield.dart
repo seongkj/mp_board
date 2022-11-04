@@ -18,10 +18,6 @@ class Formfield extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: Colors.transparent),
           ),
-          // border: OutlineInputBorder(
-          //   borderRadius: BorderRadius.circular(10),
-          //   borderSide: BorderSide(color: Colors.transparent),
-          // ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(width: 2, color: Colors.blue),

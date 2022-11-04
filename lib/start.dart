@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:mp_board/pages/login.dart';
 import 'package:mp_board/pages/mainpage.dart';
+import 'package:mp_board/pages/read.dart';
 import 'package:mp_board/pages/signup.dart';
 import 'package:mp_board/pages/writing.dart';
 
@@ -58,6 +60,17 @@ class StartPage extends StatelessWidget {
                   );
                 },
                 child: Text('글쓰기페이지'),
+              ),
+            ),
+            Container(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Read()),
+                  );
+                },
+                child: Text('게시글페이지'),
               ),
             ),
           ],

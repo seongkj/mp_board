@@ -3,8 +3,14 @@ import 'package:get/get.dart';
 import 'package:mp_board/pages/login.dart';
 import 'package:mp_board/pages/signup.dart';
 import 'package:mp_board/start.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
