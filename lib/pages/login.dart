@@ -30,9 +30,73 @@ class Login extends StatelessWidget {
             margin: EdgeInsets.only(top: 30, bottom: 30),
           ),
           // 로그인 입력 폼
+          // Formfield(
+          //   type: FormFieldType.email,
+          // ),
+          // Formfield(
+          //   type: FormFieldType.password,
+          // ),
+          Form(
+            // key: _formKey,
+            child: Column(
+              children: [
+                Container(
+                  width: 350,
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: TextFormField(
+                    key: ValueKey(4),
+                    validator: (value) {
+                      if (value!.isEmpty || !value.contains('@')) {
+                        return '이메일 형식으로 입력해주세요.';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: '이메일',
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(width: 2, color: Colors.blue),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 350,
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: TextFormField(
+                    key: ValueKey(5),
+                    validator: (value) {
+                      if (value!.isEmpty || value.length < 6) {
+                        return '비밀번호는 8자 이상 입력해주세요.';
+                      }
+                      return null;
+                    },
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: '비밀번호',
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(width: 2, color: Colors.blue),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
 
-          Formfield(),
-          Formfield(),
           // 로그인 버튼
           Container(
             width: 350,

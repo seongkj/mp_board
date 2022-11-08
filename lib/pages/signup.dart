@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import 'package:mp_board/common/formfield.dart';
 import 'package:mp_board/pages/login.dart';
+import 'package:mp_board/controllers/signup_controller.dart';
 
 // 회원가입 페이지
 class SignUp extends StatelessWidget {
@@ -11,6 +12,20 @@ class SignUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(SignupController());
+    final _formKey = GlobalKey<FormState>();
+
+    void _tryValidaton() {
+      final isValid = _formKey.currentState!.validate();
+      if (isValid) {
+        _formKey.currentState!.save();
+      }
+    }
+
+    String email = '';
+    String password = '';
+    String passwordCheck = '';
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -29,28 +44,141 @@ class SignUp extends StatelessWidget {
             color: Colors.black,
             margin: EdgeInsets.only(top: 30, bottom: 30),
           ),
-          Formfield(),
-          Formfield(),
-          Formfield(),
-          Formfield(),
-          Container(
-            width: 350,
-            height: 50,
-            margin: EdgeInsets.only(bottom: 20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Color.fromRGBO(161, 113, 255, 1),
-            ),
-            child: OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+          // 회원가입 정보 입력 폼
+          Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                // Formfield(
+                //   type: FormFieldType.email,
+                // ),
+                // Formfield(
+                //   type: FormFieldType.password,
+                // ),
+                // Formfield(
+                //   type: FormFieldType.passwordCheck,
+                // ),
+                Container(
+                  width: 350,
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: TextFormField(
+                    // controller: controller.email,
+                    key: ValueKey(1),
+                    validator: (value) {
+                      if (value!.isEmpty || !value.contains('@')) {
+                        return '이메일 형식으로 입력해주세요.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      email = value!;
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: '이메일',
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(width: 2, color: Colors.blue),
+                      ),
+                    ),
+                  ),
                 ),
+                Container(
+                  width: 350,
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: TextFormField(
+                    // controller: controller.password,
+                    key: ValueKey(2),
+                    validator: (value) {
+                      if (value!.length < 6) {
+                        return '비밀번호는 8자 이상 입력해주세요.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      password = value!;
+                    },
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: '비밀번호',
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(width: 2, color: Colors.blue),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 350,
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: TextFormField(
+                    // controller: controller.passwordCheck,
+                    key: ValueKey(3),
+                    validator: (value) {
+                      if (value!.isEmpty || value.length < 6) {
+                        return '비밀번호는 8자 이상 입력해주세요.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      passwordCheck = value!;
+                    },
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: '비밀번호확인',
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(width: 2, color: Colors.blue),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              _tryValidaton();
+            },
+            child: Container(
+              width: 350,
+              height: 50,
+              margin: EdgeInsets.only(bottom: 20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Color.fromRGBO(161, 113, 255, 1),
               ),
-              onPressed: () {},
-              child: Text(
-                '회원가입',
-                style: TextStyle(color: Colors.white),
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: () {
+                  // if (_formKey.currentState!.validate()) {}
+                  _tryValidaton();
+                },
+                child: Text(
+                  '회원가입',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
           ),
