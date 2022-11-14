@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -158,39 +159,42 @@ class SignUp extends StatelessWidget {
           ),
 
           // 회원가입 버튼
-          GestureDetector(
-            onTap: () async {
-              _tryValidaton();
-              try {
-                final newUser =
-                    await _authentication.createUserWithEmailAndPassword(
-                        email: userEmail, password: userPassword);
-                if (newUser != null) {
-                  Get.toNamed(MainPage.route);
-                  print('회원가입 성공');
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () async {
+                _tryValidaton();
+                try {
+                  final newUser =
+                      await _authentication.createUserWithEmailAndPassword(
+                          email: userEmail, password: userPassword);
+                  if (newUser != null) {
+                    Get.toNamed(MainPage.route);
+                    print('회원가입 성공');
+                  }
+                } catch (e) {
+                  print(e);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('회원가입에 실패했습니다.'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
                 }
-              } catch (e) {
-                print(e);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('회원가입에 실패했습니다.'),
-                    backgroundColor: Colors.red,
+              },
+              child: Container(
+                width: 350,
+                height: 50,
+                margin: EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Color.fromRGBO(161, 113, 255, 1),
+                ),
+                child: Center(
+                  child: Text(
+                    '회원가입',
+                    style: TextStyle(color: Colors.white),
                   ),
-                );
-              }
-            },
-            child: Container(
-              width: 350,
-              height: 50,
-              margin: EdgeInsets.only(bottom: 20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color.fromRGBO(161, 113, 255, 1),
-              ),
-              child: Center(
-                child: Text(
-                  '회원가입',
-                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ),

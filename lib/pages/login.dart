@@ -144,41 +144,44 @@ class Login extends StatelessWidget {
           ),
 
           // 로그인 버튼
-          GestureDetector(
-            onTap: () async {
-              _tryValidaton();
-              try {
-                final newUser =
-                    await _authentication.signInWithEmailAndPassword(
-                        email: userEmail, password: userPassword);
-                if (newUser != null) {
-                  Get.toNamed(MainPage.route);
-                  print('로그인 성공');
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () async {
+                _tryValidaton();
+                try {
+                  final newUser =
+                      await _authentication.signInWithEmailAndPassword(
+                          email: userEmail, password: userPassword);
+                  if (newUser != null) {
+                    Get.toNamed(MainPage.route);
+                    print('로그인 성공');
+                  }
+                } catch (e) {
+                  print(e);
+                  print('로그인 실패');
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('로그인에 실패했습니다.'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
                 }
-              } catch (e) {
-                print(e);
-                print('로그인 실패');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('로그인에 실패했습니다.'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-            },
-            child: Container(
-              width: 350,
-              height: 50,
-              margin: EdgeInsets.only(bottom: 20),
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(161, 113, 255, 1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Text(
-                  '로그인',
-                  style: TextStyle(
-                    color: Colors.white,
+              },
+              child: Container(
+                width: 350,
+                height: 50,
+                margin: EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(161, 113, 255, 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Text(
+                    '로그인',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
