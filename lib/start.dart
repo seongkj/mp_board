@@ -5,6 +5,7 @@ import 'package:mp_board/pages/mainpage.dart';
 import 'package:mp_board/pages/read.dart';
 import 'package:mp_board/pages/signup.dart';
 import 'package:mp_board/pages/writing.dart';
+import 'package:mp_board/pages/testpage.dart';
 
 class StartPage extends StatelessWidget {
   const StartPage({super.key});
@@ -71,6 +72,17 @@ class StartPage extends StatelessWidget {
                   );
                 },
                 child: Text('게시글페이지'),
+              ),
+            ),
+            Container(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TestPage()),
+                  );
+                },
+                child: Text('테스트페이지'),
               ),
             ),
           ],
