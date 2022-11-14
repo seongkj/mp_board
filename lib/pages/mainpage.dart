@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:mp_board/pages/writing.dart';
+import 'package:mp_board/pages/login.dart';
 
 // 게시판 메인 페이지
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
+  static const String route = '/mainpage';
 
   @override
   Widget build(BuildContext context) {
+    final _authentication = FirebaseAuth.instance;
+
     return Scaffold(
       body: Column(
         children: [
@@ -27,9 +32,26 @@ class MainPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                      onTap: (() => Get.to(() => MainPage())),
-                      child: Text('게시판')),
-                  Icon(Icons.more_horiz, size: 35),
+                    onTap: (() => Get.to(() => MainPage())),
+                    child: Text('게시판'),
+                  ),
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: (() => Get.to(() => Writing())),
+                        child: Text('글쓰기'),
+                      ),
+                      SizedBox(width: 20),
+                      GestureDetector(
+                        onTap: () {
+                          _authentication.signOut();
+                          Get.to(() => Login());
+                        },
+                        child: Text('로그아웃'),
+                      ),
+                      Icon(Icons.more_horiz, size: 35),
+                    ],
+                  ),
                 ],
               ),
             ),

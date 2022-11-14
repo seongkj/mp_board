@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:mp_board/common/formfield.dart';
 import 'package:mp_board/main.dart';
+import 'package:mp_board/pages/mainpage.dart';
 import 'package:mp_board/pages/signup.dart';
 
 // 로그인 페이지
@@ -12,6 +14,38 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _authentication = FirebaseAuth.instance;
+    final _formKey = GlobalKey<FormState>();
+    User? loggedUser;
+
+    void _tryValidaton() {
+      final isValid = _formKey.currentState!.validate();
+      if (isValid) {
+        _formKey.currentState!.save();
+      }
+    }
+
+    String userEmail = '';
+    String userPassword = '';
+
+    void getCurrentUser() {
+      try {
+        final user = _authentication.currentUser;
+        if (user != null) {
+          loggedUser = user;
+          print(loggedUser!.email);
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    // @override
+    // void initState() {
+    //   // super.initState();
+    //   getCurrentUser();
+    // }
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -37,7 +71,7 @@ class Login extends StatelessWidget {
           //   type: FormFieldType.password,
           // ),
           Form(
-            // key: _formKey,
+            key: _formKey,
             child: Column(
               children: [
                 Container(
@@ -50,6 +84,12 @@ class Login extends StatelessWidget {
                         return '이메일 형식으로 입력해주세요.';
                       }
                       return null;
+                    },
+                    onSaved: (value) {
+                      userEmail = value!;
+                    },
+                    onChanged: (value) {
+                      userEmail = value;
                     },
                     decoration: InputDecoration(
                       filled: true,
@@ -77,6 +117,12 @@ class Login extends StatelessWidget {
                       }
                       return null;
                     },
+                    onSaved: (value) {
+                      userPassword = value!;
+                    },
+                    onChanged: (value) {
+                      userPassword = value;
+                    },
                     obscureText: true,
                     decoration: InputDecoration(
                       filled: true,
@@ -98,27 +144,47 @@ class Login extends StatelessWidget {
           ),
 
           // 로그인 버튼
-          Container(
-            width: 350,
-            height: 50,
-            margin: EdgeInsets.only(bottom: 20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Color.fromRGBO(161, 113, 255, 1),
-            ),
-            child: OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+          GestureDetector(
+            onTap: () async {
+              _tryValidaton();
+              try {
+                final newUser =
+                    await _authentication.signInWithEmailAndPassword(
+                        email: userEmail, password: userPassword);
+                if (newUser != null) {
+                  Get.toNamed(MainPage.route);
+                  print('로그인 성공');
+                }
+              } catch (e) {
+                print(e);
+                print('로그인 실패');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('로그인에 실패했습니다.'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+            child: Container(
+              width: 350,
+              height: 50,
+              margin: EdgeInsets.only(bottom: 20),
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(161, 113, 255, 1),
+                borderRadius: BorderRadius.circular(10),
               ),
-              onPressed: () {},
-              child: Text(
-                '로그인',
-                style: TextStyle(color: Colors.white),
+              child: Center(
+                child: Text(
+                  '로그인',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
           ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:mp_board/common/formfield.dart';
 import 'package:mp_board/pages/login.dart';
 import 'package:mp_board/controllers/signup_controller.dart';
+import 'package:mp_board/pages/mainpage.dart';
 
 // 회원가입 페이지
 class SignUp extends StatelessWidget {
@@ -12,7 +14,8 @@ class SignUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SignupController());
+    // 사용자 등록, 인증에 사용
+    final _authentication = FirebaseAuth.instance;
     final _formKey = GlobalKey<FormState>();
 
     void _tryValidaton() {
@@ -22,9 +25,9 @@ class SignUp extends StatelessWidget {
       }
     }
 
-    String email = '';
-    String password = '';
-    String passwordCheck = '';
+    String userEmail = '';
+    String userPassword = '';
+    String userPasswordCheck = '';
 
     return Scaffold(
       body: Column(
@@ -71,7 +74,7 @@ class SignUp extends StatelessWidget {
                       return null;
                     },
                     onSaved: (value) {
-                      email = value!;
+                      userEmail = value!;
                     },
                     decoration: InputDecoration(
                       filled: true,
@@ -101,7 +104,7 @@ class SignUp extends StatelessWidget {
                       return null;
                     },
                     onSaved: (value) {
-                      password = value!;
+                      userPassword = value!;
                     },
                     obscureText: true,
                     decoration: InputDecoration(
@@ -119,43 +122,62 @@ class SignUp extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  width: 350,
-                  margin: EdgeInsets.only(bottom: 20),
-                  child: TextFormField(
-                    // controller: controller.passwordCheck,
-                    key: ValueKey(3),
-                    validator: (value) {
-                      if (value!.isEmpty || value.length < 6) {
-                        return '비밀번호는 8자 이상 입력해주세요.';
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      passwordCheck = value!;
-                    },
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: '비밀번호확인',
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: Colors.transparent),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(width: 2, color: Colors.blue),
-                      ),
-                    ),
-                  ),
-                )
+                // Container(
+                //   width: 350,
+                //   margin: EdgeInsets.only(bottom: 20),
+                //   child: TextFormField(
+                //     // controller: controller.passwordCheck,
+                //     key: ValueKey(3),
+                //     validator: (value) {
+                //       if (value!.isEmpty || value.length < 6) {
+                //         return '비밀번호는 8자 이상 입력해주세요.';
+                //       }
+                //       return null;
+                //     },
+                //     onSaved: (value) {
+                //       userPasswordCheck = value!;
+                //     },
+                //     obscureText: true,
+                //     decoration: InputDecoration(
+                //       filled: true,
+                //       fillColor: Colors.white,
+                //       hintText: '비밀번호확인',
+                //       enabledBorder: OutlineInputBorder(
+                //         borderRadius: BorderRadius.circular(10),
+                //         borderSide: BorderSide(color: Colors.transparent),
+                //       ),
+                //       focusedBorder: OutlineInputBorder(
+                //         borderRadius: BorderRadius.circular(10),
+                //         borderSide: BorderSide(width: 2, color: Colors.blue),
+                //       ),
+                //     ),
+                //   ),
+                // )
               ],
             ),
           ),
+
+          // 회원가입 버튼
           GestureDetector(
-            onTap: () {
+            onTap: () async {
               _tryValidaton();
+              try {
+                final newUser =
+                    await _authentication.createUserWithEmailAndPassword(
+                        email: userEmail, password: userPassword);
+                if (newUser != null) {
+                  Get.toNamed(MainPage.route);
+                  print('회원가입 성공');
+                }
+              } catch (e) {
+                print(e);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('회원가입에 실패했습니다.'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
             },
             child: Container(
               width: 350,
@@ -165,16 +187,7 @@ class SignUp extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 color: Color.fromRGBO(161, 113, 255, 1),
               ),
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  // if (_formKey.currentState!.validate()) {}
-                  _tryValidaton();
-                },
+              child: Center(
                 child: Text(
                   '회원가입',
                   style: TextStyle(color: Colors.white),

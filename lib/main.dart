@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mp_board/pages/login.dart';
+import 'package:mp_board/pages/mainpage.dart';
 import 'package:mp_board/pages/signup.dart';
 import 'package:mp_board/start.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
       routes: {
         Login.route: (context) => Login(),
         SignUp.route: (context) => SignUp(),
+        MainPage.route: (context) => MainPage(),
       },
       title: '게시판',
       home: StartPage(),
