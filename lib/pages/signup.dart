@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -9,10 +10,15 @@ import 'package:mp_board/controllers/signup_controller.dart';
 import 'package:mp_board/pages/mainpage.dart';
 
 // 회원가입 페이지
-class SignUp extends StatelessWidget {
+class SignUp extends StatefulWidget {
   const SignUp({super.key});
   static const String route = '/signup';
 
+  @override
+  State<SignUp> createState() => _SignUpState();
+}
+
+class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     // 사용자 등록, 인증에 사용
@@ -26,6 +32,7 @@ class SignUp extends StatelessWidget {
       }
     }
 
+    String userName = '';
     String userEmail = '';
     String userPassword = '';
     String userPasswordCheck = '';
@@ -53,21 +60,40 @@ class SignUp extends StatelessWidget {
             key: _formKey,
             child: Column(
               children: [
-                // Formfield(
-                //   type: FormFieldType.email,
-                // ),
-                // Formfield(
-                //   type: FormFieldType.password,
-                // ),
-                // Formfield(
-                //   type: FormFieldType.passwordCheck,
-                // ),
                 Container(
                   width: 350,
                   margin: EdgeInsets.only(bottom: 20),
                   child: TextFormField(
-                    // controller: controller.email,
                     key: ValueKey(1),
+                    validator: (value) {
+                      if (value!.length < 2) {
+                        return '닉네임은 2자 이상 입력해주세요.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      userName = value!;
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: '닉네임',
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(width: 2, color: Colors.blue),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 350,
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: TextFormField(
+                    key: ValueKey(2),
                     validator: (value) {
                       if (value!.isEmpty || !value.contains('@')) {
                         return '이메일 형식으로 입력해주세요.';
@@ -96,8 +122,7 @@ class SignUp extends StatelessWidget {
                   width: 350,
                   margin: EdgeInsets.only(bottom: 20),
                   child: TextFormField(
-                    // controller: controller.password,
-                    key: ValueKey(2),
+                    key: ValueKey(3),
                     validator: (value) {
                       if (value!.length < 6) {
                         return '비밀번호는 8자 이상 입력해주세요.';
@@ -123,37 +148,6 @@ class SignUp extends StatelessWidget {
                     ),
                   ),
                 ),
-                // Container(
-                //   width: 350,
-                //   margin: EdgeInsets.only(bottom: 20),
-                //   child: TextFormField(
-                //     // controller: controller.passwordCheck,
-                //     key: ValueKey(3),
-                //     validator: (value) {
-                //       if (value!.isEmpty || value.length < 6) {
-                //         return '비밀번호는 8자 이상 입력해주세요.';
-                //       }
-                //       return null;
-                //     },
-                //     onSaved: (value) {
-                //       userPasswordCheck = value!;
-                //     },
-                //     obscureText: true,
-                //     decoration: InputDecoration(
-                //       filled: true,
-                //       fillColor: Colors.white,
-                //       hintText: '비밀번호확인',
-                //       enabledBorder: OutlineInputBorder(
-                //         borderRadius: BorderRadius.circular(10),
-                //         borderSide: BorderSide(color: Colors.transparent),
-                //       ),
-                //       focusedBorder: OutlineInputBorder(
-                //         borderRadius: BorderRadius.circular(10),
-                //         borderSide: BorderSide(width: 2, color: Colors.blue),
-                //       ),
-                //     ),
-                //   ),
-                // )
               ],
             ),
           ),
@@ -167,7 +161,17 @@ class SignUp extends StatelessWidget {
                 try {
                   final newUser =
                       await _authentication.createUserWithEmailAndPassword(
-                          email: userEmail, password: userPassword);
+                    email: userEmail,
+                    password: userPassword,
+                  );
+                  await FirebaseFirestore.instance
+                      .collection('user')
+                      .doc(newUser.user!.uid)
+                      .set({
+                    'userName': userName,
+                    'email': userEmail,
+                  });
+
                   if (newUser != null) {
                     Get.toNamed(MainPage.route);
                     print('회원가입 성공');
@@ -231,3 +235,38 @@ class SignUp extends StatelessWidget {
     );
   }
 }
+
+
+
+/////비밀번호 확인 란 
+// Container(
+                //   width: 350,
+                //   margin: EdgeInsets.only(bottom: 20),
+                //   child: TextFormField(
+                //     // controller: controller.passwordCheck,
+                //     key: ValueKey(3),
+                //     validator: (value) {
+                //       if (value!.isEmpty || value.length < 6) {
+                //         return '비밀번호는 8자 이상 입력해주세요.';
+                //       }
+                //       return null;
+                //     },
+                //     onSaved: (value) {
+                //       userPasswordCheck = value!;
+                //     },
+                //     obscureText: true,
+                //     decoration: InputDecoration(
+                //       filled: true,
+                //       fillColor: Colors.white,
+                //       hintText: '비밀번호확인',
+                //       enabledBorder: OutlineInputBorder(
+                //         borderRadius: BorderRadius.circular(10),
+                //         borderSide: BorderSide(color: Colors.transparent),
+                //       ),
+                //       focusedBorder: OutlineInputBorder(
+                //         borderRadius: BorderRadius.circular(10),
+                //         borderSide: BorderSide(width: 2, color: Colors.blue),
+                //       ),
+                //     ),
+                //   ),
+                // )
