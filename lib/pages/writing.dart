@@ -5,9 +5,14 @@ import 'package:mp_board/pages/mainpage.dart';
 import 'package:mp_board/pages/read.dart';
 
 // 게시판 글쓰기 페이지
-class Writing extends StatelessWidget {
+class Writing extends StatefulWidget {
   const Writing({super.key});
 
+  @override
+  State<Writing> createState() => _WritingState();
+}
+
+class _WritingState extends State<Writing> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
