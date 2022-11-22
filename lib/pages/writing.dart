@@ -13,6 +13,9 @@ class Writing extends StatefulWidget {
 }
 
 class _WritingState extends State<Writing> {
+  String title = '';
+  String content = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,6 +65,9 @@ class _WritingState extends State<Writing> {
                     ),
                     style: TextStyle(fontSize: 30),
                     maxLines: 1,
+                    onChanged: (value) {
+                      title = value;
+                    },
                   ),
                   Container(
                     height: 1,
@@ -78,6 +84,9 @@ class _WritingState extends State<Writing> {
                     ),
                     style: TextStyle(fontSize: 20),
                     maxLines: 18,
+                    onChanged: (value) {
+                      content = value;
+                    },
                   ),
                   Container(
                     height: 1,

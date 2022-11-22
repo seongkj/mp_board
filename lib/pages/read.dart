@@ -27,16 +27,13 @@ class _ReadState extends State<Read> {
             .collection('storys/dgZxjw1uoKr5ZlzZbzEc/story')
             .doc('QYIoKw9p8JHuAX2dsvA7')
             .get();
-    final Map<String, dynamic> data = documentSnapshot.data()!;
-    print(data);
-    print(data['title']);
+    final Map<String, dynamic>? data = documentSnapshot.data();
 
-    final result = await _firestore
+    final DocumentSnapshot<Map<String, dynamic>> result = await _firestore
         .collection('storys/dgZxjw1uoKr5ZlzZbzEc/story')
         .doc('QYIoKw9p8JHuAX2dsvA7')
         .get();
-    print(result.data());
-    print(result['title']);
+
     title = result['title'];
     content = result['content'];
 
@@ -115,24 +112,15 @@ class _ReadState extends State<Read> {
                       color: Colors.black,
                       margin: EdgeInsets.only(top: 10, bottom: 10),
                     ),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      height: 400,
-                      child: Text(content,
-                          style: TextStyle(
-                            fontSize: 20,
-                          )),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        child: Text(content,
+                            style: TextStyle(
+                              fontSize: 20,
+                            )),
+                      ),
                     ),
-                    // TextField(
-                    //   decoration: InputDecoration(
-                    //     contentPadding: EdgeInsets.all(10),
-                    //     enabledBorder: InputBorder.none,
-                    //     focusedBorder: InputBorder.none,
-                    //     hintText: '저장된 내용',
-                    //   ),
-                    //   style: TextStyle(fontSize: 20),
-                    //   maxLines: 18,
-                    // ),
                     Container(
                       height: 1,
                       width: 700,
